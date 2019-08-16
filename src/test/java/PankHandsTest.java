@@ -1,6 +1,7 @@
 import card.PankHands;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -86,5 +87,33 @@ class PankHandsTest {
         assertEquals("deuce", result);
     }
 
+    @Test
+    void should_get_card_number_counts_given_card_map() {
+        PankHands pankHands = new PankHands();
+        //given
+        String[] players = {"2H", "2D", "5S", "8C", "TH"};
+        Map<String, Integer> cards = pankHands.divideCards(players);
+
+        //when
+        List<Integer> result = pankHands.getValues(cards);
+        Collections.sort(result);
+
+        //then
+        assertEquals(Arrays.asList(1, 1, 1, 2).toString(), result.toString());
+    }
+
+    @Test
+    void should_player1_win_given_player1_2258T_and_player2_2359T() {
+        PankHands pankHands = new PankHands();
+        //given
+        String[] player1 = {"2H", "2D", "5S", "8C", "TH"};
+        String[] player2 = {"2S", "3C", "5H", "9D", "TS"};
+
+        //when
+        String result = pankHands.compareCards(player1, player2);
+
+        //then
+        assertEquals("player1", result);
+    }
 
 }

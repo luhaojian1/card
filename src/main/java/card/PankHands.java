@@ -10,15 +10,26 @@ public class PankHands {
         List<Integer> carNumbers2 = findCarNumbers(cards2);
         Collections.sort(carNumbers1);
         Collections.sort(carNumbers2);
-        for (int i = carNumbers1.size() - 1; i >= 0; i--) {
-            if (carNumbers1.get(i) > carNumbers2.get(i)) {
-                return "player1";
+        List<Integer> values1 = getValues(cards1);
+        List<Integer> values2 = getValues(cards2);
+        int maxValue1 = values1.stream().max(Comparator.naturalOrder()).orElse(0);
+        int maxValue2 = values2.stream().max(Comparator.naturalOrder()).orElse(0);
+        if (maxValue1 > maxValue2) {
+            return "player1";
+        } else if (maxValue1 < maxValue2) {
+            return "player2";
+        } else {
+            for (int i = carNumbers1.size() - 1; i >= 0; i--) {
+                if (carNumbers1.get(i) > carNumbers2.get(i)) {
+                    return "player1";
+                }
+                if (carNumbers1.get(i) < carNumbers2.get(i)) {
+                    return "player2";
+                }
             }
-            if (carNumbers1.get(i) < carNumbers2.get(i)) {
-                return "player2";
-            }
+            return "deuce";
         }
-        return "deuce";
+
     }
 
     public Map<String, Integer> divideCards(String[] cards) {
@@ -55,5 +66,9 @@ public class PankHands {
             }
         }
         return carNumbers;
+    }
+
+    public List<Integer> getValues(Map<String, Integer> map) {
+        return new ArrayList<>(map.values());
     }
 }
