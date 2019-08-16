@@ -72,6 +72,19 @@ class PankHandsTest {
         assertEquals("player2", result);
     }
 
+    @Test
+    void should_deuce_given_player1_2358T_and_player2_2358T() {
+        PankHands pankHands = new PankHands();
+        //given
+        String[] player1 = {"2H", "3D", "5S", "8C", "TH"};
+        String[] player2 = {"2S", "3C", "5H", "8D", "TS"};
+
+        //when
+        String result = pankHands.compareCards(player1, player2);
+
+        //then
+        assertEquals("deuce", result);
+    }
 
 
 }

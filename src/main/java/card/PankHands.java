@@ -11,7 +11,6 @@ public class PankHands {
         Collections.sort(carNumbers1);
         Collections.sort(carNumbers2);
         for (int i = carNumbers1.size() - 1; i >= 0; i--) {
-
             if (carNumbers1.get(i) > carNumbers2.get(i)) {
                 return "player1";
             }
