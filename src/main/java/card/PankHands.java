@@ -18,22 +18,61 @@ public class PankHands {
         } else if (maxValue1 < maxValue2) {
             return "player2";
         } else {
-            int targetCarNumber1 = cardNumbers1.get(values1.indexOf(maxValue1));
-            int targetCarNumber2 = cardNumbers2.get(values2.indexOf(maxValue2));
-            List<Integer> cardNum1 = cardNumbers1.stream().filter(carNumber -> carNumber != targetCarNumber1).sorted().collect(Collectors.toList());
-            List<Integer> cardNum2 = cardNumbers2.stream().filter(carNumber -> carNumber != targetCarNumber2).sorted().collect(Collectors.toList());
-            for (int i = cardNum1.size() - 1; i >= 0; i--) {
-
-                if (cardNum1.get(i) > cardNum2.get(i)) {
-                    return "player1";
+            if (values1.stream().filter(value -> value == 2).count() == 2) {
+                List<Integer> twoPairCards2 = findTwoPairCarNumbers(cardNumbers2, values2);
+                List<Integer> twoPairCards1 = findTwoPairCarNumbers(cardNumbers1, values1);
+                String result = findMaxValuePlayer(twoPairCards1, twoPairCards2);
+                if (result.equals("deuce")) {
+                    int singleValue1 = cardNumbers1.stream().filter(carNumber -> !twoPairCards1.contains(carNumber)).findFirst().orElse(0);
+                    int singleValue2 = cardNumbers2.stream().filter(carNumber -> !twoPairCards1.contains(carNumber)).findFirst().orElse(0);
+                    if (singleValue1 > singleValue2) {
+                        return "player1";
+                    } else if (singleValue1 < singleValue2) {
+                        return "player2";
+                    } else return "deuce";
                 }
-                if (cardNum1.get(i) < cardNum2.get(i)) {
-                    return "player2";
-                }
+                return result;
+            } else if (maxValue1 == 2) {
+                int targetCarNumber1 = cardNumbers1.get(values1.indexOf(maxValue1));
+                int targetCarNumber2 = cardNumbers2.get(values2.indexOf(maxValue2));
+                List<Integer> cardNum1 = findFilterCarNumbers(cardNumbers1, targetCarNumber1);
+                List<Integer> cardNum2 = findFilterCarNumbers(cardNumbers2, targetCarNumber2);
+                return findMaxValuePlayer(cardNum1, cardNum2);
+            } else {
+                return findMaxValuePlayer(cardNumbers1, cardNumbers2);
             }
-            return "deuce";
+
         }
 
+    }
+
+    public List<Integer> findFilterCarNumbers(List<Integer> cardNumbers, int targetCarNumber) {
+        return cardNumbers.stream().filter(carNumber -> carNumber != targetCarNumber).sorted().collect(Collectors.toList());
+    }
+
+    public List<Integer> findTwoPairCarNumbers(List<Integer> cardNumbers, List<Integer> values) {
+        System.out.println(cardNumbers.toString());
+        System.out.println(values.toString());
+        List<Integer> twoPairCards = new ArrayList<>();
+        for (int i = 0; i < values.size(); i++) {
+            if (values.get(i) == 2) {
+                twoPairCards.add(cardNumbers.get(i));
+            }
+        }
+        Collections.sort(twoPairCards);
+        return twoPairCards;
+    }
+
+    public String findMaxValuePlayer(List<Integer> cardNumbers1, List<Integer> cardNumbers2) {
+        for (int i = cardNumbers1.size() - 1; i >= 0; i--) {
+            if (cardNumbers1.get(i) > cardNumbers2.get(i)) {
+                return "player1";
+            }
+            if (cardNumbers1.get(i) < cardNumbers2.get(i)) {
+                return "player2";
+            }
+        }
+        return "deuce";
     }
 
     public Map<String, Integer> divideCards(String[] cards) {
