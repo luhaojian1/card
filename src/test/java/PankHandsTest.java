@@ -1,6 +1,8 @@
 import card.PankHands;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,5 +38,26 @@ class PankHandsTest {
         assertEquals(1, cards.get("4"));
         assertEquals(1, cards.get("8"));
     }
+
+    @Test
+    void should_find_all_card_numbers_when_given_cards_of_map() {
+        //given
+        PankHands pankHands = new PankHands();
+        String[] players = {"2H", "3D", "4S", "8H", "TH"};
+        Map<String, Integer> cards = pankHands.divideCards(players);
+
+        //when
+        List<Integer> carNumbers = pankHands.findCarNumbers(cards);
+        Collections.sort(carNumbers);
+
+        //given
+        assertEquals(2, carNumbers.get(0));
+        assertEquals(3, carNumbers.get(1));
+        assertEquals(4, carNumbers.get(2));
+        assertEquals(8, carNumbers.get(3));
+        assertEquals(10, carNumbers.get(4));
+    }
+
+
 
 }
