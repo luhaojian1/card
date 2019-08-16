@@ -58,6 +58,20 @@ class PankHandsTest {
         assertEquals(10, carNumbers.get(4));
     }
 
+    @Test
+    void should_player2_win_given_player1_2358T_and_player2_358JA() {
+        PankHands pankHands = new PankHands();
+        //given
+        String[] player1 = {"2H", "3D", "5S", "8C", "TH"};
+        String[] player2 = {"3H", "5D", "8S", "JC", "AH"};
+
+        //when
+        String result = pankHands.compareCards(player1, player2);
+
+        //then
+        assertEquals("player2", result);
+    }
+
 
 
 }

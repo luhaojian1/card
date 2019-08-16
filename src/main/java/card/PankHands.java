@@ -1,19 +1,25 @@
 package card;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PankHands {
     public String compareCards(String[] player1, String[] player2) {
-        int card1 = Integer.parseInt(player1[0].substring(0, 1));
-        int card2 = Integer.parseInt(player2[0].substring(0, 1));
-        if (card1 > card2) {
-            return "player1";
-        } else if (card1 < card2) {
-            return "player2";
-        } else return "deuce";
+        Map<String, Integer> cards1 = divideCards(player1);
+        Map<String, Integer> cards2 = divideCards(player2);
+        List<Integer> carNumbers1 = findCarNumbers(cards1);
+        List<Integer> carNumbers2 = findCarNumbers(cards2);
+        Collections.sort(carNumbers1);
+        Collections.sort(carNumbers2);
+        for (int i = carNumbers1.size() - 1; i >= 0; i--) {
+
+            if (carNumbers1.get(i) > carNumbers2.get(i)) {
+                return "player1";
+            }
+            if (carNumbers1.get(i) < carNumbers2.get(i)) {
+                return "player2";
+            }
+        }
+        return "deuce";
     }
 
     public Map<String, Integer> divideCards(String[] cards) {
