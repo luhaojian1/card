@@ -19,6 +19,7 @@ public class PankHands {
         } else if (maxValue1 < maxValue2) {
             return "player2";
         } else {
+
             if (values1.stream().filter(value -> value == 2).count() == 2) {
                 List<Integer> twoPairCards2 = findTwoPairCarNumbers(cardNumbers2, values2);
                 List<Integer> twoPairCards1 = findTwoPairCarNumbers(cardNumbers1, values1);
@@ -135,6 +136,29 @@ public class PankHands {
             }
         }
         return true;
+    }
+
+    public int judgeCardsLevel(boolean isFlush, boolean isStraight, List<Integer> values) {
+        if (isFlush && isStraight) {
+            return Level.Straight_Flush.code();
+        } else if (isFlush) {
+            return Level.Flush.code();
+        } else if (isStraight) {
+            return Level.Straight.code();
+        } else if (values.stream().anyMatch(value -> value == 4)) {
+            return Level.Four_of_a_Kind.code();
+        } else if (values.stream().anyMatch(value -> value == 3)) {
+            if (values.stream().anyMatch(value -> value == 2)) {
+                return Level.Full_House.code();
+            }
+            return 4;
+        } else if (values.stream().filter(value -> value == 2).count() == 2) {
+            return Level.Three_of_a_Kind.code();
+        } else if (values.stream().filter(value -> value == 2).count() == 1) {
+            return Level.Two_Pairs.code();
+        }
+        return Level.Pair.code();
+
     }
 
 }

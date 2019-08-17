@@ -1,3 +1,4 @@
+import card.Level;
 import card.PankHands;
 import org.junit.jupiter.api.Test;
 
@@ -212,4 +213,19 @@ class PankHandsTest {
         //then
         assertTrue(isFlush);
     }
+
+    @Test
+    void should_judge_player_cards_level_is_straight_flush_given_flush_and_straight() {
+        PankHands pankHands = new PankHands();
+        //given
+        List<Integer> values = Arrays.asList(1, 1, 1, 1, 1);
+        boolean isFlush = true;
+        boolean isStraight = true;
+        //when
+        int level = pankHands.judgeCardsLevel(isFlush, isStraight, values);
+
+        //then
+        assertEquals(Level.Straight_Flush.code(), level);
+    }
+
 }
