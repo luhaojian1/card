@@ -228,4 +228,19 @@ class PankHandsTest {
         assertEquals(Level.Straight_Flush.code(), level);
     }
 
+    @Test
+    void should_judge_player_cards_level_is_full_house_given_player_card_3_counts_is_3_and_card_2_counts_is_2() {
+        PankHands pankHands = new PankHands();
+        //given
+        List<Integer> values = Arrays.asList(3, 2);
+        boolean isFlush = false;
+        boolean isStraight = false;
+        //when
+        int level = pankHands.judgeCardsLevel(isFlush, isStraight, values);
+
+        //then
+        assertEquals(Level.Full_House.code(), level);
+    }
+
+
 }
