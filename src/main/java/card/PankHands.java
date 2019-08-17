@@ -120,8 +120,21 @@ public class PankHands {
         return new ArrayList<>(map.values());
     }
 
-    public boolean judgeFlushCards(String[] cards) {
+    public boolean isFlushCards(String[] cards) {
         String designLevel = cards[0].substring(1);
         return Arrays.stream(cards).allMatch(card -> card.substring(1).equals(designLevel));
     }
+
+    public boolean isStraightCards(List<Integer> carNumbers) {
+        if (carNumbers.size() != 5)
+            return false;
+        for (int i = 0; i < carNumbers.size() - 1; i++) {
+            if (carNumbers.get(i) + 1 != carNumbers.get(i + 1)) {
+
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

@@ -194,7 +194,20 @@ class PankHandsTest {
         String[] player = {"3D", "4D", "6D", "8D", "9D"};
 
         //when
-        boolean isFlush = pankHands.judgeFlushCards(player);
+        boolean isFlush = pankHands.isFlushCards(player);
+
+        //then
+        assertTrue(isFlush);
+    }
+
+    @Test
+    void should_cards_is_straight_given_player_23456() {
+        PankHands pankHands = new PankHands();
+        //given
+        List<Integer> player = Arrays.asList(2, 3, 4, 5, 6);
+
+        //when
+        boolean isFlush = pankHands.isStraightCards(player);
 
         //then
         assertTrue(isFlush);
