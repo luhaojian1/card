@@ -13,6 +13,7 @@ public class PankHands {
         List<Integer> values2 = getValues(cards2);
         int maxValue1 = values1.stream().max(Comparator.naturalOrder()).orElse(0);
         int maxValue2 = values2.stream().max(Comparator.naturalOrder()).orElse(0);
+
         if (maxValue1 > maxValue2) {
             return "player1";
         } else if (maxValue1 < maxValue2) {
@@ -117,5 +118,10 @@ public class PankHands {
 
     public List<Integer> getValues(Map<String, Integer> map) {
         return new ArrayList<>(map.values());
+    }
+
+    public boolean judgeFlushCards(String[] cards) {
+        String designLevel = cards[0].substring(1);
+        return Arrays.stream(cards).allMatch(card -> card.substring(1).equals(designLevel));
     }
 }

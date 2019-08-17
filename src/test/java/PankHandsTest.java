@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PankHandsTest {
     @Test
@@ -170,5 +171,32 @@ class PankHandsTest {
 
         //then
         assertEquals("player1", result);
+    }
+
+    @Test
+    void should_player1_win_given_player1_is_34567_and_player_is_23456() {
+        PankHands pankHands = new PankHands();
+        //given
+        String[] player1 = {"3H", "7D", "4S", "5C", "6H"};
+        String[] player2 = {"5S", "4C", "2H", "3D", "6S"};
+
+        //when
+        String result = pankHands.compareCards(player1, player2);
+
+        //then
+        assertEquals("player1", result);
+    }
+
+    @Test
+    void should_cards_is_flush_given_player_3D_4D_6D_8D_9D() {
+        PankHands pankHands = new PankHands();
+        //given
+        String[] player = {"3D", "4D", "6D", "8D", "9D"};
+
+        //when
+        boolean isFlush = pankHands.judgeFlushCards(player);
+
+        //then
+        assertTrue(isFlush);
     }
 }
