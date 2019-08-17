@@ -157,4 +157,18 @@ class PankHandsTest {
         //then
         assertEquals("deuce", result);
     }
+
+    @Test
+    void should_player1_win_given_player1_is_three_of_a_kind_and_player2_is_pair() {
+        PankHands pankHands = new PankHands();
+        //given
+        String[] player1 = {"7H", "7D", "7S", "3C", "TH"};
+        String[] player2 = {"AS", "9C", "3H", "3D", "TS"};
+
+        //when
+        String result = pankHands.compareCards(player1, player2);
+
+        //then
+        assertEquals("player1", result);
+    }
 }
