@@ -7,20 +7,20 @@ public class PankHands {
     public String compareCards(String[] player1, String[] player2) {
         Map<String, Integer> cards1 = divideCards(player1);
         Map<String, Integer> cards2 = divideCards(player2);
-        List<Integer> cardNumbers1 = findCarNumbers(cards1);
-        List<Integer> cardNumbers2 = findCarNumbers(cards2);
         List<Integer> values1 = getValues(cards1);
         List<Integer> values2 = getValues(cards2);
-        int maxValue1 = values1.stream().max(Comparator.naturalOrder()).orElse(0);
-        int maxValue2 = values2.stream().max(Comparator.naturalOrder()).orElse(0);
+        int cardsLevel1 = findCardsLevel(player1, values1);
+        int cardsLevel2 = findCardsLevel(player2, values2);
 
-        if (maxValue1 > maxValue2) {
+        if (cardsLevel1 > cardsLevel2) {
             return "player1";
-        } else if (maxValue1 < maxValue2) {
+        } else if (cardsLevel1 < cardsLevel2) {
             return "player2";
         } else {
+            List<Integer> cardNumbers1 = findCarNumbers(cards1);
+            List<Integer> cardNumbers2 = findCarNumbers(cards2);
 
-            if (values1.stream().filter(value -> value == 2).count() == 2) {
+            if (cardsLevel1 == Level.Two_Pairs.code()) {
                 List<Integer> twoPairCards2 = findTwoPairCarNumbers(cardNumbers2, values2);
                 List<Integer> twoPairCards1 = findTwoPairCarNumbers(cardNumbers1, values1);
                 String result = findMaxValuePlayer(twoPairCards1, twoPairCards2);
@@ -34,17 +34,26 @@ public class PankHands {
                     } else return "deuce";
                 }
                 return result;
-            } else if (maxValue1 == 2) {
-                int targetCarNumber1 = cardNumbers1.get(values1.indexOf(maxValue1));
-                int targetCarNumber2 = cardNumbers2.get(values2.indexOf(maxValue2));
+            } else if (cardsLevel1 == Level.Pair.code() || cardsLevel1 == Level.Three_of_a_Kind.code() || cardsLevel1 == Level.Four_of_a_Kind.code()) {
+                int maxValue = values1.stream().max(Comparator.naturalOrder()).orElse(0);
+                int targetCarNumber1 = cardNumbers1.get(values1.indexOf(maxValue));
+                int targetCarNumber2 = cardNumbers2.get(values2.indexOf(maxValue));
                 List<Integer> cardNum1 = findFilterCarNumbers(cardNumbers1, targetCarNumber1);
                 List<Integer> cardNum2 = findFilterCarNumbers(cardNumbers2, targetCarNumber2);
                 return findMaxValuePlayer(cardNum1, cardNum2);
             } else {
+                System.out.println(1111);
                 return findMaxValuePlayer(cardNumbers1, cardNumbers2);
             }
 
         }
+
+    }
+
+    int findCardsLevel(String[] playingCards, List<Integer> values) {
+        boolean isStraight = isStraightCards(values);
+        boolean isFlush = isFlushCards(playingCards);
+        return judgeCardsLevel(isFlush, isStraight, values);
 
     }
 

@@ -242,5 +242,17 @@ class PankHandsTest {
         assertEquals(Level.Full_House.code(), level);
     }
 
+    @Test
+    void should_player1_win_given_player1_is_straight_and_player2_is_two_pairs() {
+        PankHands pankHands = new PankHands();
+        //given
+        String[] player1 = {"8H", "7H", "4H", "5S", "6H"};
+        String[] player2 = {"2S", "2D", "TS", "TH", "6S"};
 
+        //when
+        String result = pankHands.compareCards(player1, player2);
+
+        //then
+        assertEquals("player2", result);
+    }
 }
