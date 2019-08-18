@@ -23,8 +23,8 @@ public class PankHands {
             if (cardsLevel1 == Level.Two_Pairs.code()) {
                 List<Integer> twoPairCards2 = findTwoPairCarNumbers(cardNumbers2, values2);
                 List<Integer> twoPairCards1 = findTwoPairCarNumbers(cardNumbers1, values1);
-                String result = findMaxValuePlayer(twoPairCards1, twoPairCards2);
-                if (result.equals("deuce")) {
+                String winner = findMaxValuePlayer(twoPairCards1, twoPairCards2);
+                if (winner.equals("deuce")) {
                     int singleValue1 = cardNumbers1.stream().filter(carNumber -> !twoPairCards1.contains(carNumber)).findFirst().orElse(0);
                     int singleValue2 = cardNumbers2.stream().filter(carNumber -> !twoPairCards1.contains(carNumber)).findFirst().orElse(0);
                     if (singleValue1 > singleValue2) {
@@ -33,16 +33,12 @@ public class PankHands {
                         return "player2";
                     } else return "deuce";
                 }
-                return result;
-            } else if (cardsLevel1 == Level.Pair.code() || cardsLevel1 == Level.Three_of_a_Kind.code() || cardsLevel1 == Level.Four_of_a_Kind.code()) {
-                int maxValue = values1.stream().max(Comparator.naturalOrder()).orElse(0);
-                int targetCarNumber1 = cardNumbers1.get(values1.indexOf(maxValue));
-                int targetCarNumber2 = cardNumbers2.get(values2.indexOf(maxValue));
-                List<Integer> cardNum1 = findFilterCarNumbers(cardNumbers1, targetCarNumber1);
-                List<Integer> cardNum2 = findFilterCarNumbers(cardNumbers2, targetCarNumber2);
+                return winner;
+            } else if (cardsLevel1 == Level.Pair.code()) {
+                List<Integer> cardNum1 = findFilterCarNumbers(cardNumbers1, values1);
+                List<Integer> cardNum2 = findFilterCarNumbers(cardNumbers2, values2);
                 return findMaxValuePlayer(cardNum1, cardNum2);
             } else {
-                System.out.println(1111);
                 return findMaxValuePlayer(cardNumbers1, cardNumbers2);
             }
 
@@ -50,18 +46,20 @@ public class PankHands {
 
     }
 
-    int findCardsLevel(String[] playingCards, List<Integer> values) {
+    private int findCardsLevel(String[] playingCards, List<Integer> values) {
         boolean isStraight = isStraightCards(values);
         boolean isFlush = isFlushCards(playingCards);
         return judgeCardsLevel(isFlush, isStraight, values);
 
     }
 
-    public List<Integer> findFilterCarNumbers(List<Integer> cardNumbers, int targetCarNumber) {
+    private List<Integer> findFilterCarNumbers(List<Integer> cardNumbers, List<Integer> values) {
+        int maxValue = values.stream().max(Comparator.naturalOrder()).orElse(0);
+        int targetCarNumber = cardNumbers.get(values.indexOf(maxValue));
         return cardNumbers.stream().filter(carNumber -> carNumber != targetCarNumber).sorted().collect(Collectors.toList());
     }
 
-    public List<Integer> findTwoPairCarNumbers(List<Integer> cardNumbers, List<Integer> values) {
+    private List<Integer> findTwoPairCarNumbers(List<Integer> cardNumbers, List<Integer> values) {
         System.out.println(cardNumbers.toString());
         System.out.println(values.toString());
         List<Integer> twoPairCards = new ArrayList<>();
@@ -74,7 +72,7 @@ public class PankHands {
         return twoPairCards;
     }
 
-    public String findMaxValuePlayer(List<Integer> cardNumbers1, List<Integer> cardNumbers2) {
+    private String findMaxValuePlayer(List<Integer> cardNumbers1, List<Integer> cardNumbers2) {
         for (int i = cardNumbers1.size() - 1; i >= 0; i--) {
             if (cardNumbers1.get(i) > cardNumbers2.get(i)) {
                 return "player1";
@@ -92,10 +90,6 @@ public class PankHands {
             String key = card.substring(0, 1);
             map.merge(key, 1, Integer::sum);
         }
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            System.out.println(entry.getKey() + " " + entry.getValue());
-        }
-        System.out.println();
         return map;
     }
 
@@ -140,7 +134,6 @@ public class PankHands {
             return false;
         for (int i = 0; i < carNumbers.size() - 1; i++) {
             if (carNumbers.get(i) + 1 != carNumbers.get(i + 1)) {
-
                 return false;
             }
         }
@@ -160,7 +153,7 @@ public class PankHands {
             if (values.stream().anyMatch(value -> value == 2)) {
                 return Level.Full_House.code();
             }
-            return 4;
+            return Level.Three_of_a_Kind.code();
         } else if (values.stream().filter(value -> value == 2).count() == 2) {
             return Level.Three_of_a_Kind.code();
         } else if (values.stream().filter(value -> value == 2).count() == 1) {
