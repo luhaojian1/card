@@ -28,17 +28,22 @@ public class PankHands {
             } else if (cardsLevel1 == Level.Pair.code()) {
                 return comparePairs(values1, values2, cardNumbers1, cardNumbers2);
             } else if (cardsLevel1 == Level.Three_of_a_Kind.code() || cardsLevel1 == Level.Full_House.code() || cardsLevel1 == Level.Four_of_a_Kind.code()) {
-                return compareThreeOrFourKinds(values1, values2);
+                return compareThreeOrFourKinds(cardNumbers1, cardNumbers2, values1, values2);
             } else {
                 return findMaxValuePlayer(cardNumbers1, cardNumbers2);
             }
         }
     }
 
-    private String compareThreeOrFourKinds(List<Integer> values1, List<Integer> values2) {
-        int maxValues1 = values1.stream().max(Comparator.naturalOrder()).orElse(0);
-        int maxValues2 = values2.stream().max(Comparator.naturalOrder()).orElse(0);
+    private String compareThreeOrFourKinds(List<Integer> carNumbers1, List<Integer> carNumbers2, List<Integer> values1, List<Integer> values2) {
+        int maxValues1 = findMaxValue(carNumbers1, values1);
+        int maxValues2 = findMaxValue(carNumbers2, values2);
         return compareValueAndFindWinners(maxValues1, maxValues2);
+    }
+
+    private Integer findMaxValue(List<Integer> carNumbers, List<Integer> values) {
+        int value = values.stream().max(Comparator.naturalOrder()).orElse(0);
+        return carNumbers.get(values.indexOf(value));
     }
 
     private String comparePairs(List<Integer> values1, List<Integer> values2, List<Integer> cardNumbers1, List<Integer> cardNumbers2) {
@@ -88,8 +93,6 @@ public class PankHands {
     }
 
     private List<Integer> findTwoPairCarNumbers(List<Integer> cardNumbers, List<Integer> values) {
-        System.out.println(cardNumbers.toString());
-        System.out.println(values.toString());
         List<Integer> twoPairCards = new ArrayList<>();
         for (int i = 0; i < values.size(); i++) {
             if (values.get(i) == 2) {
